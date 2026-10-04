@@ -18,7 +18,7 @@
         "evalwrite":[{"variable":"GoveeApiKey","value":"DYNAMIK \"$Result\""}]
       }
     ],
-    "command": {"type":"http-rest", "command":{"verb":"get", "call":"https://openapi.api.govee.com/router/api/v1/user/devices", "headers":{"Govee-API-Key":"$GoveeApiKey"}}, "queryresult":"$.data.*"}
+    "command": {"type":"http-rest", "command":"DYNAMIK let req = {\"verb\":\"get\", \"call\":\"https://openapi.api.govee.com/router/api/v1/user/devices\", \"headers\":{\"Govee-API-Key\":\"$GoveeApiKey\"}}; req", "queryresult":"$.data.*"}
   },
   "template" : {
     "name":"Govee Light",
@@ -47,9 +47,9 @@
         "POWER ON": {"label":"", "type":"static", "command":"", "evaldo":[{"test":true,"then":"__INITIALISE", "or":""}]},
         "POWER OFF": {"label":"", "type":"static", "command":"", "evaldo":[{"test":true,"then":"__CLEANUP", "or":""}]},
 
-        "SWITCHON": {"label":"", "type":"http-rest", "command":{"verb":"post", "call":"https://openapi.api.govee.com/router/api/v1/device/control", "headers":{"Govee-API-Key":"$GoveeApiKey", "Content-Type":"application/json"}, "message":{"requestId":"1", "payload":{"sku":"$Sku", "device":"$DeviceId", "capability":{"type":"devices.capabilities.on_off", "instance":"powerSwitch", "value":1}}}}, "evalwrite":[{"variable":"SwitchedOn","value":true}, {"variable":"Brightness","value":"DYNAMIK Math.round($SavedBright)"}]},
+        "SWITCHON": {"label":"", "type":"http-rest", "command":"DYNAMIK let req = {\"verb\":\"post\", \"call\":\"https://openapi.api.govee.com/router/api/v1/device/control\", \"headers\":{\"Govee-API-Key\":\"$GoveeApiKey\", \"Content-Type\":\"application/json\"}, \"message\":{\"requestId\":\"1\", \"payload\":{\"sku\":\"$Sku\", \"device\":\"$DeviceId\", \"capability\":{\"type\":\"devices.capabilities.on_off\", \"instance\":\"powerSwitch\", \"value\":1}}}}; req", "evalwrite":[{"variable":"SwitchedOn","value":true}, {"variable":"Brightness","value":"DYNAMIK Math.round($SavedBright)"}]},
 
-        "SWITCHOFF": {"label":"", "type":"http-rest", "command":{"verb":"post", "call":"https://openapi.api.govee.com/router/api/v1/device/control", "headers":{"Govee-API-Key":"$GoveeApiKey", "Content-Type":"application/json"}, "message":{"requestId":"1", "payload":{"sku":"$Sku", "device":"$DeviceId", "capability":{"type":"devices.capabilities.on_off", "instance":"powerSwitch", "value":0}}}}, "evalwrite":[{"variable":"SwitchedOn","value":false}, {"variable":"SavedBright","value":"DYNAMIK Math.round($Brightness)"}, {"variable":"Brightness","value":0}]},
+        "SWITCHOFF": {"label":"", "type":"http-rest", "command":"DYNAMIK let req = {\"verb\":\"post\", \"call\":\"https://openapi.api.govee.com/router/api/v1/device/control\", \"headers\":{\"Govee-API-Key\":\"$GoveeApiKey\", \"Content-Type\":\"application/json\"}, \"message\":{\"requestId\":\"1\", \"payload\":{\"sku\":\"$Sku\", \"device\":\"$DeviceId\", \"capability\":{\"type\":\"devices.capabilities.on_off\", \"instance\":\"powerSwitch\", \"value\":0}}}}; req", "evalwrite":[{"variable":"SwitchedOn","value":false}, {"variable":"SavedBright","value":"DYNAMIK Math.round($Brightness)"}, {"variable":"Brightness","value":0}]},
 
         "BRIGHTNESSCHANGE": {"label":"", "type":"static", "command":"", "evaldo":[{"test":"DYNAMIK $SupportsBrightness", "then":"__BRIGHTNESSCHANGE_SEND", "or":""}]},
         "__BRIGHTNESSCHANGE_SEND": {"label":"", "type":"http-rest", "command":"DYNAMIK let req = {\"verb\":\"post\", \"call\":\"https://openapi.api.govee.com/router/api/v1/device/control\", \"headers\":{\"Govee-API-Key\":\"$GoveeApiKey\", \"Content-Type\":\"application/json\"}, \"message\":{\"requestId\":\"1\", \"payload\":{\"sku\":\"$Sku\", \"device\":\"$DeviceId\", \"capability\":{\"type\":\"devices.capabilities.range\", \"instance\":\"brightness\", \"value\":Math.round($Brightness)}}}}; req"},
