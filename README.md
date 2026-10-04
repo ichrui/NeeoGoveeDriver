@@ -25,6 +25,10 @@ Icons/GoveeLight.png	Driver icon for use in the Driver Library (IconLocation)
 
 Installation
 
+There are two ways to install this driver:
+
+Variant 1: Manual installation
+
 	1.	Copy the file into your meta driver's active folder:
 
 cp goveeLight.json ~/meta/active/
@@ -35,11 +39,29 @@ pm2 restart meta
 	4.	Select your device from the list of discovered Govee devices
 	5.	Done — repeat step 2–4 for each additional Govee light you want to add
 
+Variant 2: Via the Driver Library (metaCore)
+
+If you have the metaCore driver installed, you can install "Govee Light" directly from the NEEO app without touching the file system:
+
+	1.	Open the metaCore "Driver Library" shortcut on your remote/app
+	2.	Select "Update Driver Library" to fetch the latest list
+	3.	Find "Govee Light" in the list and select it to activate
+	4.	Restart meta (metaCore can do this for you from the "Danger Zone" menu)
+	5.	Continue with steps 2–5 from Variant 1 above (add the device in the NEEO app)
+
+Usage
+
+Make sure to use POWER ON and POWER OFF when launching and closing your NEEO recipe
+
+POWER ON and POWER OFF are the events the meta driver uses to start and stop listening to your Govee light's state. If you don't include them in your recipe, state changes (brightness, color, on/off) won't update live in the NEEO app.
+
+If you have several Govee lights combined under one device/recipe, you need to call POWER ON and POWER OFF individually for each one.
+
 Known limitation
 
 The NEEO/meta framework defines a device's UI elements (sliders, directories) once per device type, not per individual device instance. This means the brightness slider and color picker are always visible, even for Govee devices that don't support them (e.g. simple plugs). On unsupported devices, interacting with these controls simply does nothing — the driver checks the device's reported capabilities before sending any brightness/color command, so no invalid API request is made.
 
 Credits
 
-Built on the meta driver framework by jac459
+Built on the meta driver framework by jac459.
 Driver created by: ichrui
